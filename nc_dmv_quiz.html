@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2113.65">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;NC DMV Practice Test&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 700px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 30px auto;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #f9f9f9;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #222;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #004080;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.question {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 1px 6px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 6px 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 8px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #004080;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #e6f0ff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #004080;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition: background-color 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button:hover {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #cce0ff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#result {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.2rem;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #004080;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;NC DMV Practice Test&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="quiz"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="result"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const quizData = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "Under the NC point system, what happens if you get 12 points within 3 years?",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"You get a warning letter",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"You may lose your license",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"You pay a fine",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Nothing happens"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "What should you do when approaching a sharp curve?",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Brake once inside the curve",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Slow down before entering the curve",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Accelerate through the curve",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Maintain speed"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "What does alcohol do to your driving skills and judgment?",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Improves judgment",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Slows reflexes and impairs judgment",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Has no effect",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Sharpens concentration"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "A red triangle pointing down means:",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Stop",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Yield",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Do not enter",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"No passing"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "A flashing red light means:",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Slow down",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Stop and proceed when safe",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Yield",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Traffic signal malfunction"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "When driving in fog, you should:",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Use high beam headlights",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Use low beam headlights",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Turn off headlights",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Use hazard lights"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>question: "What is the legal speed limit inside city limits unless otherwise posted?",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>choices: [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"25 mph",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"35 mph",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"45 mph",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"55 mph"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answer: 1</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// You can add more questions here</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const quizDiv = document.getElementById('quiz');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const resultDiv = document.getElementById('result');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let currentQuestion = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let score = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function showQuestion() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (currentQuestion &gt;= quizData.length) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>quizDiv.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultDiv.textContent = `You scored ${score} out of ${quizData.length}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const q = quizData[currentQuestion];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let html = `&lt;div class="question"&gt;&lt;strong&gt;Q${currentQuestion + 1}: ${q.question}&lt;/strong&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>q.choices.forEach((choice, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>html += `&lt;button onclick="answer(${i})"&gt;${choice}&lt;/button&gt;&lt;br/&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>quizDiv.innerHTML = html;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>resultDiv.textContent = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function answer(choice) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const q = quizData[currentQuestion];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (choice === q.answer) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>score++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>alert("Correct!");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>alert(`Incorrect. The correct answer is: ${q.choices[q.answer]}`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>currentQuestion++;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>showQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>showQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
