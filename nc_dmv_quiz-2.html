@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NC DMV Practice Test — Live Simulator</title>
+<style>
+  :root{--bg:#f4f8ff;--card:#ffffff;--accent:#0b63d6;--muted:#6b7280;}
+  body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);margin:0;padding:32px;display:flex;align-items:flex-start;justify-content:center;}
+  .wrap{width:960px;max-width:96%;}
+  header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
+  header .logo{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;font-weight:700;font-size:18px;}
+  header h1{margin:0;font-size:20px;}
+  .card{background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(11,99,214,0.08);padding:22px;margin-bottom:14px;}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:var(--muted);font-size:14px;}
+  .progress{height:10px;background:#e6eefc;border-radius:999px;overflow:hidden;width:60%;}
+  .progress > i{display:block;height:100%;background:var(--accent);width:0%}
+  .question{font-size:18px;margin:8px 0 14px 0;color:#0f1724;}
+  .choices{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px;}
+  .choice{border:1px solid #e6eefc;padding:12px;border-radius:8px;cursor:pointer;user-select:none;}
+  .choice:hover{background:#f0f6ff;}
+  .choice.correct{background:#e6fff0;border-color:#66d191;}
+  .choice.wrong{background:#fff0f0;border-color:#f37272;}
+  .explain{padding:12px;border-radius:8px;background:#fbfbfd;border:1px solid #eef2ff;color:#1f2937;}
+  .controls{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
+  button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid #dbeafe;}
+  .small{font-size:13px;color:var(--muted);}
+  .score-screen{text-align:center;padding:18px;}
+  .footer{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;}
+  @media (max-width:600px){header{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">JACASPAM</div>
+    <h1>NC DMV Practice Test — Live Simulator</h1>
+  </header>
+
+  <div class="card" id="quizCard">
+    <div class="meta">
+      <div class="small">Question <span id="current">1</span> / <span id="total">50</span></div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+        <div class="small">Score: <strong id="score">0</strong></div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="question" id="question">Loading questions...</div>
+      <div class="choices" id="choices"></div>
+      <div id="explainBox" style="display:none;margin-top:10px;"><div class="explain" id="explanation"></div></div>
+      <div class="controls">
+        <button id="tryAgain" class="ghost" style="display:none">Try Again</button>
+        <button id="nextBtn">Next Question</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="settings">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-weight:700">Settings</div>
+        <div class="small">Customize your practice session</div>
+      </div>
+      <div style="text-align:right">
+        <button id="restart">Restart</button>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+      <label class="small">Questions:</label>
+      <select id="numQ">
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+      </select>
+      <label class="small" style="margin-left:12px">Randomize:</label>
+      <input type="checkbox" id="shuffle" checked />
+    </div>
+    <div class="footer">Built from the NC Driver's Handbook topics. Explanations are study tips, not official legal advice.</div>
+  </div>
+
+  <div id="scoreCard" class="card" style="display:none">
+    <div class="score-screen">
+      <h2>Your results</h2>
+      <p style="font-size:18px">You scored <strong id="finalScore">0</strong> / <span id="finalTotal">50</span></p>
+      <p id="grade" style="font-size:16px;color:var(--muted)"></p>
+      <div style="margin-top:12px"><button id="reviewBtn">Review Incorrect</button> <button id="restartBtn" class="ghost">Start Over</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const masterQuestions = [
+{q:"Under the NC point system, what may happen if you get 12 points within a 3-year period?", choices:["Your insurance is canceled","You may lose your license","You must take a driving test again","You get a warning letter"], answer:1, explain:"Accumulating 12 points within 3 years can result in license suspension."},
+{q:"What should you do when approaching a sharp curve?", choices:["Brake once inside the curve","Slow down before entering the curve","Accelerate through the curve","Maintain the same speed"], answer:1, explain:"Always reduce speed before entering a curve to maintain control."},
+{q:"What does alcohol do to your driving skills and judgment?", choices:["Improves judgment","Slows reflexes and impairs judgment","Has no effect","Sharpens concentration"], answer:1, explain:"Alcohol is a depressant — it slows reflexes and affects decision-making."},
+{q:"A flashing red traffic light means:", choices:["Caution — slow down","Stop and proceed when safe","Speed up to clear the intersection","Same as a yellow light"], answer:1, explain:"Treat a flashing red light the same as a stop sign."},
+{q:"A red triangle pointing down is a:", choices:["Stop sign","Yield sign","Do not enter sign","Warning sign"], answer:1, explain:"A downward-pointing red triangle means yield — give the right-of-way."},
+{q:"When driving in fog you should use:", choices:["High beam headlights","Low beam headlights","Parking lights only","Hazard lights"], answer:1, explain:"Low beams reduce glare from the fog and improve visibility."},
+{q:"Legal speed limit inside city limits (unless posted) is typically:", choices:["25 mph","35 mph","45 mph","55 mph"], answer:1, explain:"In many NC cities/towns the default posted speed limit is 35 mph unless otherwise posted."},
+{q:"What is the correct hand signal for a left turn?", choices:["Left arm straight out","Left arm bent up","Left arm bent down","Right arm straight out"], answer:0, explain:"Extend your left arm straight out to signal a left turn."},
+{q:"When approaching a school bus stopped with flashing red lights, you must:", choices:["Slow down and pass carefully","Stop until lights stop flashing and children are clear","Pass at 10 mph","Honk and proceed"], answer:1, explain:"You must stop when the bus is stopped with red lights to allow children to board or exit."},
+{q:"When parking uphill on a two-way street with a curb, you should:", choices:["Turn wheels toward the curb","Turn wheels away from the curb","Keep wheels straight","Leave in neutral"], answer:1, explain:"Turn the wheels away from the curb so the car rolls away from the street if brakes fail."},
+{q:"When entering an interstate, you should:", choices:["Stop and wait for green","Match the speed of traffic on the ramp and merge when safe","Cross multiple lanes quickly","Always yield to entering cars"], answer:1, explain:"Use the acceleration lane to match traffic speed and merge safely."},
+{q:"If you are involved in a crash with injuries or over $1,000 in damage, you must:", choices:["Leave immediately","Call the police only","Stop and report the crash","Move on without reporting"], answer:2, explain:"Stop, help anyone injured, exchange information, and report the crash as required."},
+{q:"A solid yellow line next to a broken yellow line means:", choices:["Passing allowed on both sides","Passing permitted on the side with the broken line","No passing allowed","Two-way left turn only"], answer:1, explain:"Passing is permitted only on the side with the broken line when safe."},
+{q:"The minimum following distance under normal conditions is about:", choices:["1 second","2 seconds","4 seconds","6 seconds"], answer:1, explain:"Use at least a 2-second following distance; increase for bad conditions."},
+{q:"When you see an emergency vehicle with lights flashing behind you, you should:", choices:["Speed up and get away","Stop immediately in the lane","Pull over to the right and stop","Ignore it"], answer:2, explain:"Yield to emergency vehicles — pull over to the right and stop until they pass."},
+{q:"What does a double solid yellow line indicate?", choices:["Traffic may pass both ways","No passing in either direction","Passing allowed for left turns only","Two-way traffic ahead"], answer:1, explain:"Double solid yellow lines mean no passing for traffic in either direction."},
+{q:"Before changing lanes, you should:", choices:["Check mirrors and blind spots and signal","Just signal and move","Honk then move","Speed up and cut in"], answer:0, explain:"Always check mirrors and blind spots, signal, then change lanes safely."},
+{q:"If your brakes fail while driving, you should first:", choices:["Jump out of the car","Shift to a lower gear and pump the brakes","Turn off the engine","Apply the parking brake immediately"], answer:1, explain:"Shift to lower gear, pump the brake pedal, use the parking brake slowly if needed."},
+{q:"Seat belts in NC are required for:", choices:["Only drivers","Front-seat occupants and drivers under 18","Everyone in the car","Only long trips"], answer:1, explain:"NC law requires seat belts for all drivers and front-seat passengers; drivers under 18 must be properly restrained."},
+{q:"When is it legal to use a cell phone without hands-free while driving?", choices:["Always allowed","Never allowed","When stopped at a red light","Only by drivers over 21"], answer:1, explain:"NC law restricts hand-held phone use while driving for safety; hands-free is recommended."},
+{q:"A yellow diamond-shaped sign means:", choices:["Regulatory","Warning","Guide","Service"], answer:1, explain:"Diamond-shaped yellow signs warn of hazards or changes in road conditions."},
+{q:"You must yield to pedestrians:", choices:["Only at crosswalks","Only if they have a stop sign","Whenever they are in a crosswalk","Only if they wave"], answer:2, explain:"Pedestrians in crosswalks have the right-of-way; always yield to them."},
+{q:"When parallel parking, the first step is to:", choices:["Back in quickly","Signal and pull alongside the space","Drive over the curb","Sound your horn"], answer:1, explain:"Signal and pull up parallel to the parked vehicle ahead of the space, then reverse in carefully."},
+{q:"If your vehicle starts to skid on water (hydroplaning), you should:", choices:["Brake hard","Speed up","Ease off the gas and steer straight","Turn the wheel sharply"], answer:2, explain:"Ease off the gas, steer straight until you regain traction; avoid sudden movements."},
+{q:"The implied consent law means when you drive in NC, you consent to:", choices:["Random searches of your car","Taking a chemical test if lawfully arrested for DWI","Free gas","A free car inspection"], answer:1, explain:"By driving in NC, you consent to chemical testing if arrested under DWI laws."},
+{q:"When approaching a railroad crossing with flashing lights, you must:", choices:["Slow down and proceed","Stop and wait until lights stop and gates are up","Honk and cross quickly","Drive around lowered gates"], answer:1, explain:"Stop and wait — never go around lowered gates; trains can overhang tracks."},
+{q:"A green arrow showing with a red light means:", choices:["Stop","Yield to turning traffic","You may turn in the direction of the arrow when safe","No turns allowed"], answer:2, explain:"The green arrow gives a protected turn in the arrow's direction."},
+{q:"When merging onto a highway you should:", choices:["Stop before merging","Yield to traffic on the highway","Assume they will yield to you","Back up if necessary"], answer:1, explain:"Yield to highway traffic and merge when there is a safe gap."},
+{q:"What is the correct following distance in bad weather?", choices:["2 seconds","Increase to 4 or more seconds","Keep same 2 seconds","1 second"], answer:1, explain:"Increase following distance to 4+ seconds in rain, snow, or heavy traffic."},
+{q:"If you see a 'Wrong Way' sign, you are:", choices:["Approaching a one-way street in the correct direction","Driving the wrong way on a one-way street","Allowed to continue","Required to speed up"], answer:1, explain:"'Wrong Way' indicates you are going against traffic — turn around safely."},
+{q:"If a traffic signal is out at an intersection, you should:", choices:["Proceed without stopping","Treat it as a 4-way stop","Honk to warn others","Ignore cross traffic"], answer:1, explain:"Treat a non-functioning signal as a four-way stop: stop and proceed in order."},
+{q:"You may pass on the right when:", choices:["The car ahead is turning left and there's room","Never allowed","There is a solid yellow centerline","On a curve"], answer:0, explain:"Passing on the right is allowed when the vehicle ahead is turning left and there's safe room."},
+{q:"A broken white line on the road means:", choices:["No lane changes","Lanes moving in opposite directions","Lanes moving in same direction; lane changes allowed","Bicycle lane"], answer:2, explain:"Broken white lines separate lanes of traffic moving in the same direction."},
+{q:"Before backing up you should always:", choices:["Look through the rear window and check mirrors","Rely on backup camera only","Honk continuously","Drive forward first"], answer:0, explain:"Turn and look over your shoulder; use mirrors — don't rely solely on cameras."},
+{q:"When you see a 'Reduced Speed Ahead' sign you should:", choices:["Ignore it","Slow to the posted lower speed before the area","Speed up","Stop immediately"], answer:1, explain:"Be prepared to slow; obey the posted reduced speed limit when you reach it."},
+{q:"Child safety seats in NC should be used until:", choices:["The child turns 2","The child reaches the height/weight limit specified by the seat","No longer than 3 years","Only for infants"], answer:1, explain:"Use appropriate car seats until the child outgrows the manufacturer's limits; booster seats as needed."},
+{q:"If your headlights fail at night, you should:", choices:["Use emergency flashers and pull off road","Turn on high beams","Speed to nearest gas station","Continue driving slowly"], answer:0, explain:"Use emergency flashers and safely pull off the road to a well-lit area."},
+{q:"The most common cause of motorcycle crashes is:", choices:["Alcohol","Other vehicles turning left","Rain","Mechanical failure"], answer:1, explain:"Cars turning left and failing to see motorcycles cause many crashes; watch for motorcycles."},
+{q:"A steady yellow traffic light indicates:", choices:["Stop if safe to do so","Speed up to beat the light","Pedestrian crossing","Malfunctioning signal"], answer:0, explain:"Yellow warns the light will turn red — stop if you can do so safely."},
+{q:"You should dim your headlights when within ______ of an oncoming vehicle.", choices:["100 feet","500 feet","1000 feet","50 feet"], answer:1, explain:"Use low beams when within 500 feet of an oncoming vehicle to avoid glare."},
+{q:"If you are under 18 and convicted of driving after consuming alcohol, your license may be:", choices:["Unaffected","Revoked or suspended under zero-tolerance laws","Given a warning only","Extended automatically"], answer:1, explain:"NC has strict penalties for underage drinking and driving, including license suspension."},
+{q:"What color are warning signs that indicate hazards ahead?", choices:["Blue","Green","Yellow","Brown"], answer:2, explain:"Yellow diamond-shaped signs warn of hazards ahead."},
+{q:"When passing a bicyclist, you must:", choices:["Give at least 3 feet of space when possible","Pass as close as possible","Honk and squeeze by","Share the lane at all times"], answer:0, explain:"Give at least three feet when passing a bicycle when safe to do so."},
+{q:"If you are involved in a minor crash and the other driver is uncooperative, you should:", choices:["Drive away","Call law enforcement and exchange information","Fight","Leave the scene"], answer:1, explain:"Stay at the scene, call law enforcement, and exchange information as required."},
+{q:"The 'Move Over' law requires drivers to:", choices:["Speed through an incident","Move over a lane or slow when approaching stopped emergency or utility vehicles with flashing lights","Stop in the lane","Ignore stopped vehicles"], answer:1, explain:"Move over one lane or slow down when approaching stopped emergency/utility vehicles with lights."},
+{q:"When approaching a hill or curve where you cannot see ahead, you should:", choices:["Pass another vehicle","Reduce speed and be prepared to stop","Use your horn and pass","Speed up"], answer:1, explain:"Slow down — you cannot see possible hazards beyond the curve or hill."},
+{q:"If you refuse a lawful chemical test under implied consent, you may:", choices:["Face no penalties","Lose your license and face additional penalties","Be rewarded","Receive a warning only"], answer:1, explain:"Refusing a test can lead to license revocation and other penalties under implied consent."},
+{q:"A yellow center lane marked on both sides by solid and dashed yellow lines is for:", choices:["Passing only","Left turns from either direction","Bicycles only","Emergency stopping"], answer:1, explain:"A two-way left-turn lane is for left turns from either direction."},
+{q:"When an oncoming vehicle has its high beams on, you should:", choices:["Turn on your high beams too","Look toward the right edge of your lane and avoid staring into the lights","Flash your lights","Drive into the other lane"], answer:1, explain:"Look to the right edge of the road to avoid glare and keep control."},
+{q:"What should you do if you see a pedestrian using a white cane or guide dog at a crosswalk?", choices:["Honk to alert them","Yield the right-of-way and stop","Speed through","Wave them across"], answer:1, explain:"Pedestrians who are blind or visually impaired must be given the right-of-way."}
+];
+
+function shuffleArray(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+let questions = [];
+let total = 50;
+let currentIndex = 0;
+let score = 0;
+let selected = null;
+let incorrectReview = [];
+
+function loadSettings(){
+  total = parseInt(document.getElementById('numQ').value,10);
+  const wantShuffle = document.getElementById('shuffle').checked;
+  questions = masterQuestions.slice();
+  if(wantShuffle) shuffleArray(questions);
+  while(questions.length < total){
+    questions = questions.concat(shuffleArray(masterQuestions.slice()));
+  }
+  questions = questions.slice(0,total);
+  document.getElementById('total').innerText = total;
+}
+
+function showQuestion(){
+  selected = null;
+  const qObj = questions[currentIndex];
+  document.getElementById('current').innerText = currentIndex+1;
+  document.getElementById('question').innerText = qObj.q;
+  const choicesDiv = document.getElementById('choices');
+  choicesDiv.innerHTML = '';
+  qObj.choices.forEach((c,i)=>{
+    const btn = document.createElement('div');
+    btn.className = 'choice';
+    btn.tabIndex = 0;
+    btn.innerText = String.fromCharCode(65+i)+'. '+c;
+    btn.onclick = ()=>selectChoice(i,btn);
+    btn.onkeydown = (e)=>{ if(e.key==='Enter') selectChoice(i,btn); };
+    choicesDiv.appendChild(btn);
+  });
+  document.getElementById('explainBox').style.display='none';
+  document.getElementById('explanation').innerText='';
+  document.getElementById('tryAgain').style.display='none';
+  updateProgressBar();
+}
+
+function selectChoice(i,el){
+  if(selected !== null) return;
+  selected = i;
+  const qObj = questions[currentIndex];
+  const all = document.querySelectorAll('.choice');
+  all.forEach((c,idx)=>{
+    c.classList.remove('correct','wrong');
+    c.style.pointerEvents = 'none';
+    if(idx === qObj.answer) c.classList.add('correct');
+  });
+  if(i === qObj.answer){
+    score++; document.getElementById('score').innerText = score;
+    document.getElementById('explanation').innerText = 'Correct — '+qObj.explain;
+  } else {
+    all[i].classList.add('wrong');
+    document.getElementById('explanation').innerText = 'Incorrect — '+qObj.explain;
+    incorrectReview.push({q:qObj, picked:i, index:currentIndex});
+    document.getElementById('tryAgain').style.display='inline-block';
+  }
+  document.getElementById('explainBox').style.display='block';
+  document.getElementById('explainBox').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function updateProgressBar(){
+  const percent = Math.round(((currentIndex)/total)*100);
+  document.getElementById('bar').style.width = percent + '%';
+}
+
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  if(selected === null){
+    if(!confirm('You have not selected an answer. Skip this question?')) return;
+  }
+  currentIndex++;
+  if(currentIndex >= total){
+    showScore();
+  } else {
+    showQuestion();
+  }
+});
+
+document.getElementById('tryAgain').addEventListener('click',()=>{
+  const qObj = questions[currentIndex];
+  selected = null;
+  const all = document.querySelectorAll('.choice');
+  all.forEach((c)=>{ c.classList.remove('correct','wrong'); c.style.pointerEvents='auto'; });
+  document.getElementById('explainBox').style.display='none';
+  document.getElementById('explanation').innerText='';
+  document.getElementById('tryAgain').style.display='none';
+});
+
+document.getElementById('restart').addEventListener('click', ()=>{
+  startSession();
+});
+
+document.getElementById('restartBtn').addEventListener('click', ()=>{
+  startSession();
+});
+
+document.getElementById('reviewBtn').addEventListener('click', ()=>{
+  if(incorrectReview.length === 0){ alert('No incorrect answers to review — great job!'); return; }
+  questions = incorrectReview.map(x=>x.q);
+  total = questions.length;
+  currentIndex = 0;
+  score = 0;
+  incorrectReview = [];
+  document.getElementById('finalScore').innerText = 0;
+  document.getElementById('quizCard').style.display = 'block';
+  document.getElementById('scoreCard').style.display = 'none';
+  document.getElementById('total').innerText = total;
+  document.getElementById('score').innerText = score;
+  showQuestion();
+});
+
+function showScore(){
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('scoreCard').style.display = 'block';
+  document.getElementById('finalScore').innerText = score;
+  document.getElementById('finalTotal').innerText = total;
+  const pct = Math.round((score/total)*100);
+  const gradeText = pct >= 80 ? 'Passed — good work! Keep reviewing to improve.' : 'Study more — review the explanations and try again.';
+  document.getElementById('grade').innerText = pct + '% — ' + gradeText;
+}
+
+function startSession(){
+  incorrectReview = [];
+  score = 0;
+  currentIndex = 0;
+  loadSettings();
+  document.getElementById('quizCard').style.display = 'block';
+  document.getElementById('scoreCard').style.display = 'none';
+  document.getElementById('score').innerText = score;
+  document.getElementById('bar').style.width = '0%';
+  document.getElementById('finalScore').innerText = 0;
+  showQuestion();
+}
+
+window.addEventListener('load', ()=>{
+  document.getElementById('numQ').value = '50';
+  startSession();
+});
+</script>
+</body>
+</html>
